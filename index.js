@@ -1,50 +1,82 @@
 const inquirer = require('inquirer');
+const express = require('express');
 const consoletable = require('console.table');
 const mysql = require('mysql2');
 const { devNull } = require('os');
 const { brotliDecompress } = require('zlib');
 
-//how do I call on the USE e
+
 
 const db = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'employees_db'
+        database: "employee_db"
     },
     console.log(`Connected to the employees_db database.`)
 );
 
-console.log('------------------------------------------')
+console.log('─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────');
+console.log('─██████████████─██████──────────██████─██████████████─██████─────────██████████████─████████──████████─██████████████─██████████████─');
+console.log('─██░░░░░░░░░░██─██░░██████████████░░██─██░░░░░░░░░░██─██░░██─────────██░░░░░░░░░░██─██░░░░██──██░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─');
+console.log('─██░░██████████─██░░░░░░░░░░░░░░░░░░██─██░░██████░░██─██░░██─────────██░░██████░░██─████░░██──██░░████─██░░██████████─██░░██████████─');
+console.log('─██░░██─────────██░░██████░░██████░░██─██░░██──██░░██─██░░██─────────██░░██──██░░██───██░░░░██░░░░██───██░░██─────────██░░██─────────');
+console.log('─██░░██████████─██░░██──██░░██──██░░██─██░░██████░░██─██░░██─────────██░░██──██░░██───████░░░░░░████───██░░██████████─██░░██████████─');
+console.log('─██░░░░░░░░░░██─██░░██──██░░██──██░░██─██░░░░░░░░░░██─██░░██─────────██░░██──██░░██─────████░░████─────██░░░░░░░░░░██─██░░░░░░░░░░██─');
+console.log('─██░░██████████─██░░██──██████──██░░██─██░░██████████─██░░██─────────██░░██──██░░██───────██░░██───────██░░██████████─██░░██████████─');
+console.log('─██░░██─────────██░░██──────────██░░██─██░░██─────────██░░██─────────██░░██──██░░██───────██░░██───────██░░██─────────██░░██─────────');
+console.log('─██░░██████████─██░░██──────────██░░██─██░░██─────────██░░██████████─██░░██████░░██───────██░░██───────██░░██████████─██░░██████████─');
+console.log('─██░░░░░░░░░░██─██░░██──────────██░░██─██░░██─────────██░░░░░░░░░░██─██░░░░░░░░░░██───────██░░██───────██░░░░░░░░░░██─██░░░░░░░░░░██─');
+console.log('─██████████████─██████──────────██████─██████─────────██████████████─██████████████───────██████───────██████████████─██████████████─');
+console.log('─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────');
+console.log('───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────');
+console.log('─████████████───██████████████─██████████████─██████████████─██████████████───██████████████─██████████████─██████████████─');
+console.log('─██░░░░░░░░████─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██───██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─');
+console.log('─██░░████░░░░██─██░░██████░░██─██████░░██████─██░░██████░░██─██░░██████░░██───██░░██████░░██─██░░██████████─██░░██████████─');
+console.log('─██░░██──██░░██─██░░██──██░░██─────██░░██─────██░░██──██░░██─██░░██──██░░██───██░░██──██░░██─██░░██─────────██░░██─────────');
+console.log('─██░░██──██░░██─██░░██████░░██─────██░░██─────██░░██████░░██─██░░██████░░████─██░░██████░░██─██░░██████████─██░░██████████─');
+console.log('─██░░██──██░░██─██░░░░░░░░░░██─────██░░██─────██░░░░░░░░░░██─██░░░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─');
+console.log('─██░░██──██░░██─██░░██████░░██─────██░░██─────██░░██████░░██─██░░████████░░██─██░░██████░░██─██████████░░██─██░░██████████─');
+console.log('─██░░██──██░░██─██░░██──██░░██─────██░░██─────██░░██──██░░██─██░░██────██░░██─██░░██──██░░██─────────██░░██─██░░██─────────');
+console.log('─██░░████░░░░██─██░░██──██░░██─────██░░██─────██░░██──██░░██─██░░████████░░██─██░░██──██░░██─██████████░░██─██░░██████████─');
+console.log('─██░░░░░░░░████─██░░██──██░░██─────██░░██─────██░░██──██░░██─██░░░░░░░░░░░░██─██░░██──██░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─');
+console.log('─████████████───██████──██████─────██████─────██████──██████─████████████████─██████──██████─██████████████─██████████████─');
+console.log('───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────');
 
 function appMenu() {
     inquirer.prompt([
         {
-            type: 'checkbox',
-            message: 'What would you like to do?',
+            type: 'list',
             name: 'userchoice',
+            message: 'What would you like to do?',
             choices: ['View all Departments', 'View all Roles', 'View all Employees', 'Add a Department', 'Add a Role', 'Add an Employee', 'Update an Employee Role', 'Quit']
         },
     ]).then((choice) => {
         switch (choice.userchoice) {
             case 'View all Departments':
                 //query to show all Departments or query the department table 
-                db.query("SELECT * from department;", function (err, results) {
+                db.query('SELECT * from department', function (err, results) {
                     console.table(results);
+                    if (err) {
+                        console.log(err);
+                    }
                 });
                 break;
             case 'View all Roles':
                 //query to show the roles table 
-                db.query('SELECT * from role;', function (err, results) {
+                db.query('SELECT * from role', function (err, results) {
                     console.table(results);
+                    if (err) {
+                        console.log(err);
+                    }
                 });
                 break;
             case 'View all Employees':
                 // query to show the employees table 
-                db.query("SELECT * from employee;", function (err, results){
+                db.query('SELECT * from employee', function (err, results) {
                     console.table(results);
-                }); 
+                });
                 break;
             case 'Add a Department':
                 //function to add a department to the department table 
@@ -58,24 +90,24 @@ function appMenu() {
                 createEmployee();
                 break;
             case 'Update an Employee Role':
-                //query the database to update the Employee's role 
-                // db.query('UPDATE employee set  ', function (err, results) {
-                // console.log(results);
-                // });
+                //function to update an employee's role 
+                console.log("Update an employee");
                 break;
             default:
-                console.log(working); 
+                console.log("Bye");
                 return;
         }
     });
 }
+
+appMenu();
 
 function createRole() {
     inquirer
         .prompt([
             {
                 type: 'input',
-                name: 'name',
+                name: 'title',
                 message: 'What is the name of the role?'
             },
             {
@@ -84,17 +116,24 @@ function createRole() {
                 message: 'What is the salary of the role?'
             },
             {
-                type: 'input',
+                type: 'list',
                 name: 'department',
-                message: 'What department does this role belong to?'
-            },
-
+                message: 'What department does this role belong to?',
+                choices: ["Engineering", "Sales", "Marketing", "Human Resources", "Finance"]
+            }
         ])
         .then(function (answers) {
-            //query to populate the role table with the role data that the user inputs 
-            //
+            const { title, salary, department } = answers;
+            console.log(answers);
+            //query to populate the role table with the role data that the user inputs
+            //There is going to be an error here because the answers gives a string for department but we need the department_id which is an INT 
+            //     db.query(`INSERT INTO role (title, salary, department_id) VALUES (${answers})`, function (err, results){
+            //         console.table(results);
+            //     appMenu();
+            // });
         });
-};
+}
+
 
 function createEmployee() {
     inquirer
@@ -110,35 +149,45 @@ function createEmployee() {
                 message: 'What is the last name of the Employee?'
             },
             {
-                type: 'input',
+                type: 'list',
                 name: 'role',
-                message: 'What is the role of the employee?'
+                message: 'What is the role of the employee?',
+                choices: ["Senior Accountant", "Senior Engineer", "Sales Lead", "Human Resource", "Marketing Lead", "Accountant", "Intern", "Entry Level Engineer"]
+
             },
             {
-                type: 'input',
+                type: 'list',
                 name: 'manager',
-                message: 'Who is the employees manager?'
+                message: 'Who is the employees manager?',
+                choices: ["None", "Marie Curie"]
             },
         ])
         .then(function (answers) {
+            const { firstName, lastName, role, manager } = answers;
             //query to populate the employee table with the role data that the user inputs 
-            //db.query('SHOW ', function (err, results) {
-            //console.log(results);
+            //this query will have the same error as the above function
+            // db.query(`INSERT INTO employee (first_name, last_name, manager_id)`, function (err, results) {
+            //     console.log(answers);
+            //     appMenu();
+            // });
         });
-}
+};
+
 
 function createDepartment() {
     inquirer
-    .prompt ([
-        {
-            type:'input', 
-            name:'name', 
-            message: 'What is the name of the department?'
-        },
-    ])
-    .then(function(input) {
-        //query to populate the employee table with the role data that the user inputs 
-        //db.query('SHOW ', function (err, results) {
-        //console.log(results);
-    });
+        .prompt([
+            {
+                type: 'input',
+                name: 'name',
+                message: 'What is the name of the department?'
+            },
+        ])
+        .then(function (answers) {
+            console.log(answers);
+            //query to populate the employee table with the role data that the user inputs 
+            //db.query('SHOW ', function (err, results) {
+            //console.log(results);
+            appMenu();
+        });
 }
