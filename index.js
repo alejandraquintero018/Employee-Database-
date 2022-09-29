@@ -4,6 +4,7 @@ const consoletable = require('console.table');
 const mysql = require('mysql2');
 const { devNull } = require('os');
 const { brotliDecompress } = require('zlib');
+const { title } = require('process');
 
 const db = mysql.createConnection(
     {
@@ -45,7 +46,6 @@ function wordart() {
 }
 wordart();
 
-
 function appMenu() {
     inquirer.prompt([
         {
@@ -64,6 +64,7 @@ function appMenu() {
                         console.log(err);
                     }
                 });
+                appMenu();
                 break;
             case 'View all Roles':
                 //query to show the roles table 
@@ -73,12 +74,14 @@ function appMenu() {
                         console.log(err);
                     }
                 });
+                appMenu();
                 break;
             case 'View all Employees':
                 // query to show the employees table 
                 db.query('SELECT * from employee', function (err, results) {
                     console.table(results);
                 });
+                appMenu();
                 break;
             case 'Add a Department':
                 //function to add a department to the department table 
@@ -102,35 +105,56 @@ function appMenu() {
         }
     });
 }
-
 appMenu();
 
-function updateEmployee() {
-    db.query('SELECT * employee') //then map this 
-    const employee
-    inquirer
-        .prompt([
-            {
-                type: 'list',
-                name: 'employee',
-                message: "Which employee's role would you like to update?",
-                choices: employee
-            },
-            {
-                type: 'list',
-                name: 'role',
-                message: "What would you like the employee's updated role to be?",
-                choices: //["Senior Accountant", "Senior Engineer", "Sales Lead", "Human Resource", "Marketing Lead", "Accountant", "Intern", "Entry Level Engineer"]
-        }
+// function updateEmployee() {
+//     db.query('SELECT * FROM employee', function (err, results) {
+//         const employee = results.map(({ id, first_name, last_name }) => (
+//             {
+//                 value: id,
+//                 name: `${first_name} ${last_name}`
+//             }));
+//         db.query('SELECT * FROM role', function (err, results) {
+//             const roles = results.map(({ id, title }) => (
+//                 {
+//                     value: id,
+//                     name: `${title}`
+//                 }
+//             )).
+//                 inquirer
+//                 .prompt([
+//                     {
+//                         type: 'list',
+//                         name: 'employee',
+//                         message: "Which employee's role would you like to update?",
+//                         choices: [employee]
+//                     },
+//                     {
+//                         type: 'list',
+//                         name: 'role',
+//                         message: "What would you like the employee's updated role to be?",
+//                         choices: [roles]
+//                     }
+//                 ]).then(function (answers) {
+//                     console.log(answers)
+//                     //where we query the database to update the role of the employee
+//                     db.query(`UPDATE employee SET = ? WHERE id =  `, function (err, results) {
+//                         //console.table(results);
+//                     })
 
-        ]).then((answers)
-        )
-
-}
+//                 });
+//     }
+// }
 
 function createRole() {
-    inquirer
-        .prompt([
+    db.query('SELECT * FROM department', function (err, results) {
+        const department = results.map(({ id, nameof }) => (
+            {
+                value: id,
+                name: `${nameof}`
+            }
+        ))
+        inquirer.prompt([
             {
                 type: 'input',
                 name: 'title',
@@ -145,24 +169,35 @@ function createRole() {
                 type: 'list',
                 name: 'department',
                 message: 'What department does this role belong to?',
-                choices: 'SELECT first_name and last_name FROM employee'
-                // ["Engineering", "Sales", "Marketing", "Human Resources", "Finance"]
+                choices: [department]
+
             }
-        ])
-        .then(function (answers) {
+        ]).then(function (answers) {
             const { title, salary, department } = answers;
             console.log(answers);
             //query to populate the role table with the role data that the user inputs
             //There is going to be an error here because the answers gives a string for department but we need the department_id which is an INT 
-            db.query(`INSERT INTO role (title, salary, department_id) VALUES (${answers})`, function (err, results) {
+            db.query(`INSERT INTO role (title, salary, department_id) VALUES = (?)`, (title, salary, department), function (err, results) {
                 console.table(results);
-                appMenu();
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log(`You have successfully added ${title} in your database.`)
+                }
             });
+            appMenu();
         });
-}
+    });
+};
 
-//helper functions 
 function createEmployee() {
+    db.query('SELECT * FROM employee', function (err, results) {
+        const roles = results.map(({ id, title }) => (
+            {
+                value: id,
+                name: `${title}`
+            }
+        ))
     db.query('SELECT * FROM employee', function (err, results) {
         const employees = results.map(({ id, first_name, last_name }) => (
             {
@@ -186,31 +221,31 @@ function createEmployee() {
                     type: 'list',
                     name: 'role',
                     message: 'What is the role of the employee?',
-                    choices: ["Senior Accountant", "Senior Engineer", "Sales Lead", "Human Resource", "Marketing Lead", "Accountant", "Intern", "Entry Level Engineer"]
+                    choices: [roles]
 
                 },
                 {
                     type: 'list',
                     name: 'manager',
                     message: 'Who is the employees manager?',
-                    choices: //give a list of all employees, ["None", "Marie Curie"]
+                    choices: [employees]
                 },
-            ])
-    
-        .then(function (answers) {
-            answers.manager
-            const { firstName, lastName, role, manager } = answers;
-            //query to populate the employee table with the role data that the user inputs 
-            //this query will have the same error as the above function
-            db.query(`INSERT INTO employee (first_name, last_name, manager_id) VALUES = ?`, (firstName, lastName, role, manager), function (err, results) {
-                console.log(answers);
-                appMenu();
+            ]).then(function (answers) {
+                answers.manager
+                const { firstName, lastName, role, manager } = answers;
+                //query to populate the employee table with the role data that the user inputs 
+                //this query will have the same error as the above function
+                db.query(`INSERT INTO employee (first_name, last_name, manager_id) VALUES = ?`, (firstName, lastName, role, manager), function (err, results) {
+                    console.log(answers);
+                    appMenu();
+                });
             });
-            db.query('SELECT * from employee');
-        });
+        
+    });
+}
 
-};
-
+//function to create a department in the department table. 
+//function should be finished
 function createDepartment() {
     inquirer
         .prompt([
@@ -223,15 +258,14 @@ function createDepartment() {
         .then(function (newDept) {
             console.log(newDept);
             //query to populate the employee table with the role data that the user inputs 
-            db.query('INSERT INTO department (name) VALUES = ?', [newDept.name], function (err, results) {
+            db.query('INSERT INTO department (nameof) VALUES (?)', [newDept.name], function (err, results) {
                 console.table(results);
                 if (err) {
                     console.log(err);
+                } else {
+                    console.log(`You have added ${newDept.name} into your database`);
                 }
                 appMenu();
             })
         });
 }
-
-
-
