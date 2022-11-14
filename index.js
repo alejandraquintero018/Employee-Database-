@@ -255,7 +255,8 @@ function createEmployee() {
                     choices: employees
                 }
             ]).then(function (answers) {
-                db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES = ("${answers.firstName}", "${answers.lastName}", "${answers.role}", "${answers.manager}");`, function(err, results) {
+                const sqlquery = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${answers.firstName}", ${answers.lastName}, "${answers.role}, ${answers.manager}");`;
+                db.query(sqlquery, function(err, results) {
                     if (err) {
                         console.log(err);
                     }

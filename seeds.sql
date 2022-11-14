@@ -16,9 +16,9 @@
 --        ("Intern", 35000), 
 --        ("Entry Level Engineer", 75000); 
 
--- INSERT INTO employee (first_name, last_name) 
--- VALUES ("Marie", "Curie"),
---        ("Sally", "Ride"), 
+-- INSERT INTO employee (first_name, last_name, role_id, manager_id)
+-- VALUES ("Marie", "Curie", 1, null),
+--        ("Sally", "Ride", ), 
 --        ("Emily", "Dickenson"), 
 --        ("Florence", "Nightingale"),
 --        ("Hayley","Kiyoko"),
